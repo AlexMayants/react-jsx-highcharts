@@ -14,12 +14,14 @@ const highchartsExamples = [
   { name: 'SplineWithPlotBands' },
   { name: 'SynchronisedCharts', additional: ['promise-polyfill', 'fetch-polyfill'] },
   { name: 'Sparkline', additional: ['promise-polyfill', 'fetch-polyfill'] },
-  { name: 'InvertedChart' }
+  { name: 'InvertedChart' },
+  { name: 'ImmutableJS', additional: ['immutable'] }
 ];
 
 const highstockExamples = [
   { name: 'CustomComponent', additional: ['moment', 'react-day-picker'] },
-  { name: 'Highstocks' }
+  { name: 'Highstocks' },
+  { name: 'HighstockPlotBands' }
 ];
 
 const examples = [].concat(
@@ -30,8 +32,10 @@ const examples = [].concat(
 const exampleNames = examples.map(e => e.name);
 
 const externals = {
-  'react-jsx-highcharts': '../../packages/react-jsx-highcharts/dist/react-jsx-highcharts.min.js',
-  'react-jsx-highstock':  '../../packages/react-jsx-highstock/dist/react-jsx-highstock.min.js',
+  // 'react-jsx-highcharts': '../../packages/react-jsx-highcharts/dist/react-jsx-highcharts.min.js',
+  // 'react-jsx-highstock':  '../../packages/react-jsx-highstock/dist/react-jsx-highstock.min.js',
+  'react-jsx-highcharts': 'https://unpkg.com/react-jsx-highcharts/dist/react-jsx-highcharts.min.js',
+  'react-jsx-highstock':  'https://unpkg.com/react-jsx-highstock/dist/react-jsx-highstock.min.js',
   'react':                'https://cdnjs.cloudflare.com/ajax/libs/react/15.5.4/react.min.js',
   'react-dom':            'https://cdnjs.cloudflare.com/ajax/libs/react/15.5.4/react-dom.min.js',
   'highcharts':           'https://code.highcharts.com/highcharts.js',
@@ -43,7 +47,8 @@ const externals = {
   'moment':               'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js',
   'react-day-picker':     'https://unpkg.com/react-day-picker@6.0.5/lib/daypicker.js',
   'promise-polyfill':     'https://www.promisejs.org/polyfills/promise-6.1.0.js',
-  'fetch-polyfill':       'https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.3/fetch.min.js'
+  'fetch-polyfill':       'https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.3/fetch.min.js',
+  'immutable':            'https://cdnjs.cloudflare.com/ajax/libs/immutable/3.8.1/immutable.min.js'
 };
 
 module.exports = {
@@ -63,6 +68,7 @@ module.exports = {
     'highstock-release': 'Highcharts',
     'moment': 'moment',
     'react-day-picker': 'DayPicker',
+    'immutable': 'Immutable',
     'react-jsx-highcharts': 'ReactHighcharts',
     'react-jsx-highstock': 'ReactHighcharts'
   },

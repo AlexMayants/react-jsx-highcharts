@@ -64,7 +64,7 @@ var example =
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 164);
+/******/ 	return __webpack_require__(__webpack_require__.s = 163);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -2125,13 +2125,17 @@ var _react = __webpack_require__(13);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactJsxHighstock = __webpack_require__(50);
+var _immutable = __webpack_require__(278);
+
+var _immutable2 = _interopRequireDefault(_immutable);
+
+var _reactJsxHighcharts = __webpack_require__(50);
 
 var _ExampleCode = __webpack_require__(51);
 
 var _ExampleCode2 = _interopRequireDefault(_ExampleCode);
 
-var _exampleCode = __webpack_require__(163);
+var _exampleCode = __webpack_require__(162);
 
 var _exampleCode2 = _interopRequireDefault(_exampleCode);
 
@@ -2147,108 +2151,127 @@ var App = function (_Component) {
 
     var _this = (0, _possibleConstructorReturn3.default)(this, (App.__proto__ || (0, _getPrototypeOf2.default)(App)).call(this, props));
 
+    _this.updateLiveData = _this.updateLiveData.bind(_this);
+    _this.handleStartLiveUpdate = _this.handleStartLiveUpdate.bind(_this);
+    _this.handleStopLiveUpdate = _this.handleStopLiveUpdate.bind(_this);
+
     var now = Date.now();
     _this.state = {
-      data1: (0, _dataHelpers.createRandomData)(now, 1e8),
-      data2: (0, _dataHelpers.createRandomData)(now, 1e8)
+      data1: _immutable2.default.List((0, _dataHelpers.createRandomData)(now)),
+      data2: _immutable2.default.List((0, _dataHelpers.createRandomData)(now)),
+      liveUpdate: false
     };
     return _this;
   }
 
   (0, _createClass3.default)(App, [{
-    key: 'render',
-    value: function render() {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this.handleStartLiveUpdate();
+    }
+  }, {
+    key: 'updateLiveData',
+    value: function updateLiveData() {
       var _state = this.state,
           data1 = _state.data1,
           data2 = _state.data2;
+
+
+      this.setState({
+        data1: data1.push((0, _dataHelpers.createDataPoint)()),
+        data2: data2.push((0, _dataHelpers.createDataPoint)())
+      });
+    }
+  }, {
+    key: 'handleStartLiveUpdate',
+    value: function handleStartLiveUpdate(e) {
+      e && e.preventDefault();
+      this.setState({
+        liveUpdate: window.setInterval(this.updateLiveData, 1000)
+      });
+    }
+  }, {
+    key: 'handleStopLiveUpdate',
+    value: function handleStopLiveUpdate(e) {
+      e.preventDefault();
+      window.clearInterval(this.state.liveUpdate);
+      this.setState({
+        liveUpdate: false
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _state2 = this.state,
+          data1 = _state2.data1,
+          data2 = _state2.data2,
+          liveUpdate = _state2.liveUpdate;
 
 
       return _react2.default.createElement(
         'div',
         { className: 'app' },
         _react2.default.createElement(
-          _reactJsxHighstock.HighchartsStockChart,
+          _reactJsxHighcharts.HighchartsChart,
           null,
-          _react2.default.createElement(_reactJsxHighstock.Chart, { zoomType: 'x' }),
+          _react2.default.createElement(_reactJsxHighcharts.Chart, null),
           _react2.default.createElement(
-            _reactJsxHighstock.Title,
+            _reactJsxHighcharts.Title,
             null,
-            'Highstocks Example'
+            'Dynamically updating data (2)'
           ),
           _react2.default.createElement(
-            _reactJsxHighstock.Legend,
+            _reactJsxHighcharts.Subtitle,
+            null,
+            'Using Immutable.js Lists for data'
+          ),
+          _react2.default.createElement(
+            _reactJsxHighcharts.Legend,
             null,
             _react2.default.createElement(
-              _reactJsxHighstock.Legend.Title,
+              _reactJsxHighcharts.Legend.Title,
               null,
-              'Key'
+              'Legend'
             )
           ),
           _react2.default.createElement(
-            _reactJsxHighstock.RangeSelector,
-            null,
+            _reactJsxHighcharts.XAxis,
+            { type: 'datetime' },
             _react2.default.createElement(
-              _reactJsxHighstock.RangeSelector.Button,
-              { count: 1, type: 'day' },
-              '1d'
-            ),
-            _react2.default.createElement(
-              _reactJsxHighstock.RangeSelector.Button,
-              { count: 7, type: 'day' },
-              '7d'
-            ),
-            _react2.default.createElement(
-              _reactJsxHighstock.RangeSelector.Button,
-              { count: 1, type: 'month' },
-              '1m'
-            ),
-            _react2.default.createElement(
-              _reactJsxHighstock.RangeSelector.Button,
-              { type: 'all' },
-              'All'
-            ),
-            _react2.default.createElement(_reactJsxHighstock.RangeSelector.Input, { boxBorderColor: '#7cb5ec' })
-          ),
-          _react2.default.createElement(_reactJsxHighstock.Tooltip, null),
-          _react2.default.createElement(
-            _reactJsxHighstock.XAxis,
-            null,
-            _react2.default.createElement(
-              _reactJsxHighstock.XAxis.Title,
+              _reactJsxHighcharts.XAxis.Title,
               null,
               'Time'
             )
           ),
           _react2.default.createElement(
-            _reactJsxHighstock.YAxis,
-            { id: 'price' },
+            _reactJsxHighcharts.YAxis,
+            { id: 'pressure' },
             _react2.default.createElement(
-              _reactJsxHighstock.YAxis.Title,
+              _reactJsxHighcharts.YAxis.Title,
               null,
-              'Price'
+              'Pressure (m)'
             ),
-            _react2.default.createElement(_reactJsxHighstock.AreaSplineSeries, { id: 'profit', name: 'Profit', data: data1 })
+            _react2.default.createElement(_reactJsxHighcharts.LineSeries, { id: 'p1', name: 'Sensor 1', data: data1, color: '#6dbcdb' }),
+            _react2.default.createElement(_reactJsxHighcharts.LineSeries, { id: 'p2', name: 'Sensor 2', data: data2, color: '#ce424b' })
+          )
+        ),
+        _react2.default.createElement(
+          'div',
+          null,
+          !liveUpdate && _react2.default.createElement(
+            'button',
+            { className: 'btn btn-success', onClick: this.handleStartLiveUpdate },
+            'Live update'
           ),
-          _react2.default.createElement(
-            _reactJsxHighstock.YAxis,
-            { id: 'social', opposite: true },
-            _react2.default.createElement(
-              _reactJsxHighstock.YAxis.Title,
-              null,
-              'Social Buzz'
-            ),
-            _react2.default.createElement(_reactJsxHighstock.SplineSeries, { id: 'twitter', name: 'Twitter mentions', data: data2 })
-          ),
-          _react2.default.createElement(
-            _reactJsxHighstock.Navigator,
-            null,
-            _react2.default.createElement(_reactJsxHighstock.Navigator.Series, { seriesId: 'profit' }),
-            _react2.default.createElement(_reactJsxHighstock.Navigator.Series, { seriesId: 'twitter' })
+          liveUpdate && _react2.default.createElement(
+            'button',
+            { className: 'btn btn-danger', onClick: this.handleStopLiveUpdate },
+            'Stop update'
           )
         ),
         _react2.default.createElement(
           _ExampleCode2.default,
-          { name: 'Highstocks' },
+          { name: 'ImmutableJS' },
           _exampleCode2.default
         )
       );
@@ -2279,8 +2302,7 @@ exports.default = App;
 /* 159 */,
 /* 160 */,
 /* 161 */,
-/* 162 */,
-/* 163 */
+/* 162 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2289,10 +2311,10 @@ exports.default = App;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = "\n<HighchartsStockChart>\n  <Chart zoomType=\"x\" />\n\n  <Title>Highstocks Example</Title>\n\n  <Legend>\n    <Legend.Title>Key</Legend.Title>\n  </Legend>\n\n  <RangeSelector>\n    <RangeSelector.Button count={1} type=\"day\">1d</RangeSelector.Button>\n    <RangeSelector.Button count={7} type=\"day\">7d</RangeSelector.Button>\n    <RangeSelector.Button count={1} type=\"month\">1m</RangeSelector.Button>\n    <RangeSelector.Button type=\"all\">All</RangeSelector.Button>\n    <RangeSelector.Input boxBorderColor=\"#7cb5ec\" />\n  </RangeSelector>\n\n  <Tooltip />\n\n  <XAxis>\n    <XAxis.Title>Time</XAxis.Title>\n  </XAxis>\n\n  <YAxis id=\"price\">\n    <YAxis.Title>Price</YAxis.Title>\n    <AreaSplineSeries id=\"profit\" name=\"Profit\" data={data1} />\n  </YAxis>\n\n  <YAxis id=\"social\" opposite>\n    <YAxis.Title>Social Buzz</YAxis.Title>\n    <SplineSeries id=\"twitter\" name=\"Twitter mentions\" data={data2} />\n  </YAxis>\n\n  <Navigator>\n    <Navigator.Series seriesId=\"profit\" />\n    <Navigator.Series seriesId=\"twitter\" />\n  </Navigator>\n</HighchartsStockChart>";
+exports.default = "\nconstructor (props) {\n  super(props);\n  this.updateLiveData = this.updateLiveData.bind(this);\n  this.handleStartLiveUpdate = this.handleStartLiveUpdate.bind(this);\n\n  const now = Date.now();\n  this.state = {\n    data1: Immutable.List(createRandomData(now)),\n    data2: Immutable.List(createRandomData(now)),\n    liveUpdate: false\n  };\n}\n\nupdateLiveData () {\n  const { data1, data2 } = this.state;\n\n  this.setState({\n    data1: data1.push(createDataPoint()),\n    data2: data2.push(createDataPoint())\n  });\n}\n\nhandleStartLiveUpdate (e) {\n  e && e.preventDefault();\n  this.setState({\n    liveUpdate: window.setInterval(this.updateLiveData, 1000)\n  });\n}\n\nrender () {\n  const { data1, data2 } = this.state;\n\n  return (\n    <HighchartsChart>\n      <Chart />\n\n      <Title>Dynamically updating data (2)</Title>\n\n      <Subtitle>Using Immutable.js Lists for data</Subtitle>\n\n      <Legend>\n        <Legend.Title>Legend</Legend.Title>\n      </Legend>\n\n      <XAxis type=\"datetime\">\n        <XAxis.Title>Time</XAxis.Title>\n      </XAxis>\n\n      <YAxis id=\"pressure\">\n        <YAxis.Title>Pressure (m)</YAxis.Title>\n        <LineSeries id=\"p1\" name=\"Sensor 1\" data={data1} color=\"#6dbcdb\" />\n        <LineSeries id=\"p2\" name=\"Sensor 2\" data={data2} color=\"#ce424b\" />\n      </YAxis>\n    </HighchartsChart>\n  );\n}";
 
 /***/ }),
-/* 164 */
+/* 163 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2313,6 +2335,126 @@ var _App2 = _interopRequireDefault(_App);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 _reactDom2.default.render(_react2.default.createElement(_App2.default, null), document.getElementById('root'));
+
+/***/ }),
+/* 164 */,
+/* 165 */,
+/* 166 */,
+/* 167 */,
+/* 168 */,
+/* 169 */,
+/* 170 */,
+/* 171 */,
+/* 172 */,
+/* 173 */,
+/* 174 */,
+/* 175 */,
+/* 176 */,
+/* 177 */,
+/* 178 */,
+/* 179 */,
+/* 180 */,
+/* 181 */,
+/* 182 */,
+/* 183 */,
+/* 184 */,
+/* 185 */,
+/* 186 */,
+/* 187 */,
+/* 188 */,
+/* 189 */,
+/* 190 */,
+/* 191 */,
+/* 192 */,
+/* 193 */,
+/* 194 */,
+/* 195 */,
+/* 196 */,
+/* 197 */,
+/* 198 */,
+/* 199 */,
+/* 200 */,
+/* 201 */,
+/* 202 */,
+/* 203 */,
+/* 204 */,
+/* 205 */,
+/* 206 */,
+/* 207 */,
+/* 208 */,
+/* 209 */,
+/* 210 */,
+/* 211 */,
+/* 212 */,
+/* 213 */,
+/* 214 */,
+/* 215 */,
+/* 216 */,
+/* 217 */,
+/* 218 */,
+/* 219 */,
+/* 220 */,
+/* 221 */,
+/* 222 */,
+/* 223 */,
+/* 224 */,
+/* 225 */,
+/* 226 */,
+/* 227 */,
+/* 228 */,
+/* 229 */,
+/* 230 */,
+/* 231 */,
+/* 232 */,
+/* 233 */,
+/* 234 */,
+/* 235 */,
+/* 236 */,
+/* 237 */,
+/* 238 */,
+/* 239 */,
+/* 240 */,
+/* 241 */,
+/* 242 */,
+/* 243 */,
+/* 244 */,
+/* 245 */,
+/* 246 */,
+/* 247 */,
+/* 248 */,
+/* 249 */,
+/* 250 */,
+/* 251 */,
+/* 252 */,
+/* 253 */,
+/* 254 */,
+/* 255 */,
+/* 256 */,
+/* 257 */,
+/* 258 */,
+/* 259 */,
+/* 260 */,
+/* 261 */,
+/* 262 */,
+/* 263 */,
+/* 264 */,
+/* 265 */,
+/* 266 */,
+/* 267 */,
+/* 268 */,
+/* 269 */,
+/* 270 */,
+/* 271 */,
+/* 272 */,
+/* 273 */,
+/* 274 */,
+/* 275 */,
+/* 276 */,
+/* 277 */,
+/* 278 */
+/***/ (function(module, exports) {
+
+module.exports = Immutable;
 
 /***/ })
 /******/ ]);
